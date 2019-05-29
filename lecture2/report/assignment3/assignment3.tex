@@ -1,0 +1,19 @@
+\documentclass[class=jsarticle, crop=false, dvipdfmx, fleqn]{standalone}
+\input{../../../preamble}
+\begin{document}
+\section{}
+
+
+各カテゴリの分散共分散行列が等しいので，対数事後確率は以下のように表される。
+\begin{equation}
+	\log p(y|x) = {\mu_y}^\mathrm{T} \Sigma^{-1} x - \frac{1}{2} {\mu_y}^\mathrm{T} \Sigma^{-1} \mu_y + \log p_y + C''
+\end{equation}
+いま，2値分類問題を考えるから，
+ある\(x\)について\(\log p(y=1|x) > \log p(y=2|x)\)となるときに\(x\)はカテゴリ\(\hat{y}=1\)に，
+\(\log p(y=1|x) < \log p(y=2|x)\)となるときに\(x\)はカテゴリ\(\hat{y}=2\)に分類される。
+
+これを実装した結果が\pageref{listing:assignment3}ページのlisting \ref{listing:assignment3}である。
+この実行結果より，\(x_1\)と\(x_2\)は，それぞれ100{\%}の正解率で分類できることがわかる。
+
+
+\end{document}

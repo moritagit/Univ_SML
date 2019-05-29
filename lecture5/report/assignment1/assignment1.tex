@@ -1,0 +1,82 @@
+\documentclass[class=jsarticle, crop=false, dvipdfmx, fleqn]{standalone}
+\input{../../../preamble}
+\begin{document}
+\section{}
+
+原信号\(\qty{\bm{s}_i}_{i=1}^{n} \ \qty(\bm{s}_i \in \mathbb{R}^d)\)，
+観測信号\(\qty{\bm{x}_i}_{i=1}^{n} \ \qty(\bm{x}_i \in \mathbb{R}^d)\)
+について，
+混合行列\(\bm{M}\ (\in \mathbb{R}^{d \times d}) \)を用いて，
+\begin{equation}
+    \bm{x}_i = \bm{M} \bm{s}_i
+    \label{eq:s2x}
+\end{equation}
+が成立するときを考える。
+ここで，原信号\(\qty{\bm{s}_i}_{i=1}^{n}\)はi.i.d，
+期待値\(\bm{\mu}_s = \bm{0}\)で，
+共分散行列が単位行列\(\bm{\Sigma}_s = \bm{I}_d\)であり，
+また，\(\bm{M}\)は逆行列を持つと仮定する（独立成分分析）。
+
+観測信号を球状化（白色化）することを考える。
+観測信号の期待値と共分散行列は次のようになる。
+\begin{align}
+    \bm{\mu}_x
+        & = \frac{1}{n} \sum_{i=1}^{n} \bm{x}_i \\
+        & = \frac{1}{n} \sum_{i=1}^{n} \bm{M} \bm{s}_i \\
+        & = \bm{M} \frac{1}{n} \sum_{i=1}^{n} \bm{s}_i \\
+        & = \bm{M} \bm{\mu}_s \\
+        & = \bm{0}
+\end{align}
+\begin{align}
+    \bm{\Sigma}_x
+        & = \frac{1}{n} \sum_{i=1}^{n} (\bm{x}_i - \bm{\mu}_x)^\mathrm{T} (\bm{x}_i - \bm{\mu}_x) \\
+        & = \frac{1}{n} \sum_{i=1}^{n} \bm{x}_i^\mathrm{T} \bm{x}_i \\
+        & \equiv \bm{C}
+\end{align}
+これより，\(\bm{\Sigma}_x = \bm{C}\)が逆行列を持つことを仮定し，
+\(\bm{x}_i\)を白色化すると，
+\begin{align}
+    \tilde{\bm{x}}_i
+        & = \bm{\Sigma}^{-\frac{1}{2}} (\bm{x}_i - \bm{\mu}_x) \\
+        & = \bm{C}^{-\frac{1}{2}} \bm{x}_i
+\end{align}
+また，式(\ref{eq:s2x})の両辺に左側から\(\bm{C}^{-1/2}\)をかけることで，
+\begin{align}
+    & \tilde{\bm{x}}_i = \tilde{\bm{M}} \bm{s}_i
+        \label{eq:s2x_tilde} \\
+    & \tilde{\bm{M}} = \bm{C}^{-\frac{1}{2}} \bm{M}
+\end{align}
+となる。
+
+白色化された\(\tilde{\bm{x}}_i\)（平均\(\bm{0}\)）の共分散行列を考える。
+\(\bm{s}_i\)は平均\(\bm{0}\)，共分散行列\(\bm{I}_d\)であることに注意しつつ，
+式(\ref{eq:s2x_tilde})を用いれば，
+\begin{align}
+    \bm{\Sigma}_{\tilde{x}}
+        & = \frac{1}{n} \sum_{i=1}^{n} \tilde{\bm{x}}_i \tilde{\bm{x}}_i^\mathrm{T} \\
+        & = \frac{1}{n} \sum_{i=1}^{n} (\tilde{\bm{M}} \bm{s}_i) (\bm{s}_i^\mathrm{T} \tilde{\bm{M}}^\mathrm{T}) \\
+        & = \tilde{\bm{M}} \qty(\frac{1}{n} \sum_{i=1}^{n} \bm{s}_i \bm{s}_i^\mathrm{T}) \tilde{\bm{M}}^\mathrm{T} \\
+        & = \tilde{\bm{M}} \bm{\Sigma}_s \tilde{\bm{M}}^\mathrm{T} \\
+        & = \tilde{\bm{M}} \bm{I}_d \tilde{\bm{M}}^\mathrm{T} \\
+        & = \tilde{\bm{M}} \tilde{\bm{M}}^\mathrm{T}
+\end{align}
+白色化より，当然これは単位行列\(\bm{I}_d\)となる。
+結局，
+\begin{equation}
+    \tilde{\bm{M}} \tilde{\bm{M}}^\mathrm{T} = \bm{I}_d
+    \label{eq:result}
+\end{equation}
+を得る。
+式(\ref{eq:result})は\(\tilde{\bm{M}}\)が直交行列であることを示している。
+つまり，
+\begin{equation}
+    \tilde{\bm{M}}^{-1} = \tilde{\bm{M}}^\mathrm{T}
+\end{equation}
+が成立する。
+これより，次式が成立する。
+\begin{equation}
+    \tilde{\bm{M}} \tilde{\bm{M}}^\mathrm{T} = \tilde{\bm{M}}^\mathrm{T} \tilde{\bm{M}} = \bm{I}_d
+\end{equation}
+
+
+\end{document}

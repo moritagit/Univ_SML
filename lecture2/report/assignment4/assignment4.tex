@@ -1,0 +1,58 @@
+\documentclass[class=jsarticle, crop=false, dvipdfmx, fleqn]{standalone}
+\input{../../../preamble}
+\begin{document}
+\section{}
+
+線形判別分析に基づき0--9までの10クラスの手書き文字認識を行う。
+プログラムは\pageref{listing:assignment4}ページのlisting\ref{listing:assignment4}に示した。
+
+以下に結果を示す。
+混同行列は表\ref{tab:confusion_matrix}のようになり，
+また，各カテゴリごとの正解率等は表\ref{tab:result}のようになった。
+
+なお，マハラノビス距離に基づく分類を行ってみたところ，
+trainデータの分散行列の行列式が10となり逆行列が計算できなかったため，
+こちらは断念した。
+
+\begin{table}[H]
+	\centering
+	\caption{混同行列}
+	\begin{tabular}{|c||cccccccccc|} \hline
+			& 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\ \hline\hline
+		0	& 192 & 0 & 0 & 3 & 0 & 0 & 4 & 0 & 1 & 0 \\
+		1	& 0 & 199 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 \\
+		2	& 0 & 0 & 169 & 8 & 8 & 1 & 2 & 4 & 8 & 0 \\
+		3	& 1 & 0 & 0 & 182 & 1 & 5 & 0 & 2 & 8 & 1 \\
+		4	& 0 & 2 & 2 & 0 & 182 & 0 & 1 & 0 & 3 & 10 \\
+		5	& 4 & 0 & 0 & 21 & 4 & 162 & 1 & 0 & 4 & 4 \\
+		6	& 3 & 1 & 2 & 0 & 1 & 5 & 185 & 0 & 3 & 0 \\
+		7	& 1 & 2 & 0 & 1 & 5 & 1 & 0 & 181 & 0 & 9 \\
+		8	& 3 & 0 & 1 & 16 & 6 & 6 & 0 & 1 & 164 & 3 \\
+		9	& 0 & 1 & 0 & 0 & 8 & 0 & 0 & 7 & 2 & 182 \\
+		\hline
+	\end{tabular}
+	\label{tab:confusion_matrix}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\caption{各カテゴリごとの結果}
+	\begin{tabular}{lrrr}
+		Category & \# Data & \# Correct & Accuracy \\ \hline
+		0 & 200 & 192 & 0.960 \\
+		1 & 200 & 199 & 0.995 \\
+		2 & 200 & 169 & 0.845 \\
+		3 & 200 & 182 & 0.910 \\
+		4 & 200 & 182 & 0.910 \\
+		5 & 200 & 162 & 0.810 \\
+		6 & 200 & 185 & 0.925 \\
+		7 & 200 & 181 & 0.905 \\
+		8 & 200 & 164 & 0.820 \\
+		9 & 200 & 182 & 0.910
+	\end{tabular}
+	\label{tab:result}
+\end{table}
+
+
+
+\end{document}

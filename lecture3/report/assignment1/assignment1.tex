@@ -1,0 +1,68 @@
+\documentclass[class=jsarticle, crop=false, dvipdfmx, fleqn]{standalone}
+\input{../../../preamble}
+\begin{document}
+\section{}
+
+微分と積分の順序が交換できるとき，
+不偏推定量\(\hat{\theta}\)について，次式を示す。
+\begin{equation}
+	\mathbb{E}_{\bm{x}_1,\ \dots,\ \bm{x}_n \sim q(\cdot;\ \theta)}
+			\qty[\hat{\theta} \sum_{i=1}^{n} \eval{\pdv{}{\theta} \log{q(\bm{x}_i;\ \theta)}}_{\theta = \theta^*}]
+	= 1
+	\label{eq:objective}
+\end{equation}
+
+i.i.d.な訓練標本\(\qty{\bm{x}_i}_{i=1}^{n}\)がモデル\(q(\bm{x};\ \theta)\)から生起するとき，
+その確率は，
+\begin{equation}
+	p(\bm{x}_1,\ \dots,\ \bm{x}_n) = \prod_{i=1}^{n} q(\bm{x}_i;\ \theta)
+\end{equation}
+となる。
+このとき，対数尤度とその\(\theta\)による微分は，
+\begin{align}
+	& L(\theta) = \log{p} = \sum_{i=1}^{n} \log{q(\bm{x}_i;\ \theta)} \\
+	& \pdv{L(\theta)}{\theta} = \pdv{}{\theta} (\log{p}) = \sum_{i=1}^{n} \pdv{}{\theta} (\log{q(\bm{x}_i;\ \theta)})
+\end{align}
+である。
+
+いま，式(\ref{eq:objective})の左辺は次のように変形できる。
+\begin{align}
+	\mathbb{E}_{\bm{x}_1,\ \dots,\ \bm{x}_n \sim q(\cdot;\ \theta)}
+			\qty[\hat{\theta} \sum_{i=1}^{n} \eval{\pdv{}{\theta} \log{q(\bm{x}_i;\ \theta)}}_{\theta = \theta^*}]
+		& = \mathbb{E}_{\bm{x} \sim p(\cdot;\ \theta)} \qty[\hat{\theta} \eval{\pdv{}{\theta} (\log{p})}_{\theta = \theta^*}] \\
+		& = \int p \hat{\theta} \eval{\pdv{}{\theta} (\log{p})}_{\theta = \theta^*} \ \dd\bm{x}
+			\notag \\
+		& = \int \hat{\theta} \eval{\qty{p \pdv{}{\theta} (\log{p})}}_{\theta = \theta^*} \ \dd\bm{x} 
+			\label{eq:1}
+\end{align}
+
+また，\(\mathbb{E}\qty[\hat{\theta}] = \theta^{*}\)の両辺を\(\theta^{*}\)で偏微分することを考える。
+微分と積分の順序が交換できるとき，
+\begin{align}
+	1
+	& = \pdv{}{\theta^{*}} \mathbb{E}\qty[\hat{\theta}] \\
+	& = \pdv{}{\theta^{*}} \int p \hat{\theta} \ \dd\bm{x} \\
+	& = \int \pdv{}{\theta^{*}} \qty(p \hat{\theta}) \ \dd\bm{x} \\
+	& = \int \hat{\theta} \pdv{p}{\theta^{*}} \ \dd\bm{x}
+\end{align}
+となる。いま，
+\begin{equation}
+	p(\bm{x};\ \theta) \qty(\pdv{}{\theta} \log{p(\bm{x};\ \theta)}) = \pdv{}{\theta} p(\bm{x}; \theta)
+\end{equation}
+であるから，結局，
+\begin{equation}
+	\int \hat{\theta} \eval{\qty{p \pdv{}{\theta} (\log{p})}}_{\theta = \theta^*} \ \dd\bm{x} = 1
+		\label{eq:2}
+\end{equation}
+となる。
+
+式(\ref{eq:1})，(\ref{eq:2})から，
+\begin{align}
+	\mathbb{E}_{\bm{x}_1,\ \dots,\ \bm{x}_n \sim q(\cdot;\ \theta)}
+			\qty[\hat{\theta} \sum_{i=1}^{n} \eval{\pdv{}{\theta} \log{q(\bm{x}_i;\ \theta)}}_{\theta = \theta^*}] = \int \hat{\theta} \eval{\qty{p \pdv{}{\theta} (\log{p})}}_{\theta = \theta^*} \ \dd\bm{x} = 1
+\end{align}
+であることが示された。
+
+
+
+\end{document}

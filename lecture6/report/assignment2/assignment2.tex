@@ -1,0 +1,72 @@
+\documentclass[class=jsarticle, crop=false, dvipdfmx, fleqn]{standalone}
+\input{../../../preamble}
+\begin{document}
+\section{}
+
+最近傍識別器によって0--9までの10クラスの手書き文字認識を行う。
+近傍数\(k\)は識別誤差に関する交差確認により決定する。
+
+以下に結果を示す。
+近傍数\(k\)の候補として，1--10を考えた。
+各\(k\)についての，
+交差確認法で求めた正解数の平均値を表\ref{tab:k_result}に示す。
+これより，最も高い正解数を与える\(k\)を選ぶと，
+\(k = 3\)となる。
+\(k = 3\)に対する混同行列は表\ref{tab:confusion_matrix}のようになり，
+また，各カテゴリごとの正解率等は表\ref{tab:result}のようになった。
+
+プログラムは\pageref{listing:assignment2}ページのListing \ref{listing:assignment2}に示した。
+
+
+\begin{table}[H]
+	\centering
+	\caption{各\(k\)についての，交差確認法で求めた正解数の平均値}
+	\begin{tabular}{cccccccccc}
+		1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\ \hline
+		484.7 & 483.2 & 485.1 & 484.8 & 483.4 & 482.7 & 481.6 & 481.2 & 480.0 & 479.7
+	\end{tabular}
+	\label{tab:k_result}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\caption{混同行列}
+	\begin{tabular}{|c||cccccccccc|} \hline
+			& 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\ \hline\hline
+		0     & 198 & 0 & 1 & 0 & 0 & 0 & 1 & 0 & 0 & 0 \\
+		1     & 0 & 199 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+		2     & 0 & 0 & 195 & 0 & 0 & 0 & 0 & 2 & 3 & 0 \\
+		3     & 0 & 0 & 0 & 190 & 0 & 4 & 0 & 1 & 4 & 1 \\
+		4     & 0 & 1 & 0 & 0 & 189 & 0 & 3 & 0 & 0 & 7 \\
+		5     & 2 & 0 & 3 & 3 & 1 & 186 & 0 & 0 & 1 & 4 \\
+		6     & 1 & 0 & 2 & 0 & 0 & 0 & 197 & 0 & 0 & 0 \\
+		7     & 0 & 1 & 0 & 0 & 4 & 0 & 0 & 191 & 0 & 4 \\
+		8     & 2 & 0 & 2 & 3 & 0 & 3 & 0 & 0 & 187 & 3 \\
+		9     & 0 & 0 & 0 & 0 & 2 & 0 & 0 & 0 & 0 & 198 \\
+		\hline
+	\end{tabular}
+	\label{tab:confusion_matrix}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\caption{各カテゴリごとの結果}
+	\begin{tabular}{crrr}
+		Category & {\#}Data & {\#}Correct & Accuracy \\ \hline
+		0 & 200 & 198 & 0.990 \\
+		1 & 200 & 199 & 0.995 \\
+		2 & 200 & 195 & 0.975 \\
+		3 & 200 & 190 & 0.950 \\
+		4 & 200 & 189 & 0.945 \\
+		5 & 200 & 186 & 0.930 \\
+		6 & 200 & 197 & 0.985 \\
+		7 & 200 & 191 & 0.955 \\
+		8 & 200 & 187 & 0.935 \\
+		9 & 200 & 198 & 0.990 \\
+		All & 2,000 & 1,930 & 0.965
+	\end{tabular}
+	\label{tab:result}
+\end{table}
+
+
+\end{document}

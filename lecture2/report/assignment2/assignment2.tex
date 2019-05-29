@@ -1,0 +1,94 @@
+\documentclass[class=jsarticle, crop=false, dvipdfmx, fleqn]{standalone}
+\input{../../../preamble}
+\begin{document}
+\section{}
+
+入力次元\(d = 2\)，カテゴリ数\(c = 2\)，
+各カテゴリの事前分布\(p(y=1) = p(y=2) = 1/2 \)の分類問題を考える。
+また，各カテゴリの条件付き確率\(p(x|y)\)は正規分布であるとし，
+その期待値と共分散行列は次のようになるとする。
+\begin{align}
+	& \mu_1 = \begin{bmatrix} 2 \\ 0 \end{bmatrix}, \qquad
+	\mu_2 = \begin{bmatrix} -2 \\ 0 \end{bmatrix} \\
+	& \Sigma_1 = \Sigma_2 = \Sigma = 
+		\begin{bmatrix}
+			9-8{\cos}^2 \beta & 8 \sin\beta \cos\beta \\
+			8 \sin\beta \cos\beta & 9-8{\sin}^2 \beta
+		\end{bmatrix}
+\end{align}
+
+線形判別分析に基づいて決定境界を求める。
+決定境界は，
+\begin{equation}
+	p(y=1|x) = p(y=2|x)
+	\label{eq:decision_boundary}
+\end{equation}
+で与えられる。
+ここで，各カテゴリの分散共分散行列が等しいので，
+\begin{equation}
+	\log\ p(y|x) = {\mu_y}^\mathrm{T} \Sigma^{-1} x - \frac{1}{2} {\mu_y}^\mathrm{T} \Sigma^{-1} \mu_y + \log{p_y} + C''
+	\label{eq:log_probability}
+\end{equation}
+となる。よって
+\begin{align}
+	& \log p(y=1|x) = {\mu_1}^\mathrm{T} \Sigma^{-1} x - \frac{1}{2} {\mu_1}^\mathrm{T} \Sigma^{-1} \mu_1 + \log{p_1} + C'' \\
+	& \log p(y=2|x) = {\mu_2}^\mathrm{T} \Sigma^{-1} x - \frac{1}{2} {\mu_2}^\mathrm{T} \Sigma^{-1} \mu_2 + \log{p_2} + C''
+\end{align}
+式(\ref{eq:decision_boundary})と\(p(y=1) = p(y=2) = 1/2 \)とから，
+辺々引いて，
+\begin{equation}
+	({\mu_1}^\mathrm{T} - {\mu_2}^\mathrm{T}) \Sigma^{-1} x - \frac{1}{2} ({\mu_1}^\mathrm{T} \Sigma^{-1} \mu_1 - {\mu_2}^\mathrm{T} \Sigma^{-1} \mu_2) = 0
+	\label{eq:answer_character_expression}
+\end{equation}
+を得る。
+いま，\(\Sigma\)の逆行列を求めると，
+\begin{align}
+	& \Sigma^{-1} = \frac{1}{9}
+		\begin{bmatrix}
+			9-8{\sin}^2 \beta & -8 \cos\beta \sin\beta \\
+			-8 \cos\beta \sin\beta & 9-8{\cos}^2 \beta
+		\end{bmatrix}
+\end{align}
+となるので，
+\begin{align}
+	({\mu_1}^\mathrm{T} - {\mu_2}^\mathrm{T}) \Sigma^{-1}
+		& =
+		\begin{bmatrix} 4 & 0 \end{bmatrix} \cdot \frac{1}{9}
+		\begin{bmatrix}
+			9-8{\sin}^2 \beta & -8 \cos\beta \sin\beta \\
+			-8 \cos\beta \sin\beta & 9-8{\cos}^2 \beta
+		\end{bmatrix} \\
+		& = \frac{4}{9} \begin{bmatrix} 9-8{\sin}^2 \beta & -8 \cos\beta \sin\beta \end{bmatrix} \\
+	{\mu_1}^\mathrm{T} \Sigma^{-1} \mu_1
+		& = 
+		\begin{bmatrix} 2 & 0 \end{bmatrix} \cdot \frac{1}{9}
+		\begin{bmatrix}
+			9-8{\sin}^2 \beta & -8 \cos\beta \sin\beta \\
+			-8 \cos\beta \sin\beta & 9-8{\cos}^2 \beta
+		\end{bmatrix}
+		\cdot \begin{bmatrix} 2 \\ 0 \end{bmatrix}
+		= \frac{4}{9} (9-8{\sin}^2 \beta) \\
+	{\mu_2}^\mathrm{T} \Sigma^{-1} \mu_2
+		& = 
+		\begin{bmatrix} -2 & 0 \end{bmatrix} \cdot \frac{1}{9}
+		\begin{bmatrix}
+			9-8{\sin}^2 \beta & -8 \cos\beta \sin\beta \\
+			-8 \cos\beta \sin\beta & 9-8{\cos}^2 \beta
+		\end{bmatrix}
+		\cdot \begin{bmatrix} -2 \\ 0 \end{bmatrix}
+		= \frac{4}{9} (9-8{\sin}^2 \beta)
+\end{align}
+となる。
+これらを式(\ref{eq:answer_character_expression})に代入して，
+\begin{align}
+	& \frac{4}{9} \qty((9-8{\sin}^2 \beta) x^{(1)} -8 \cos\beta \sin\beta x^{(2)}) -\frac{1}{2} \qty(\frac{4}{9} (9-8{\sin}^2 \beta) - \frac{4}{9} (9-8{\sin}^2 \beta)) = 0 \\
+	& (9-8{\sin}^2 \beta) x^{(1)} -8 \cos\beta \sin\beta x^{(2)} = 0 \\
+	& x^{(1)} = -\frac{8 \cos\beta \sin\beta}{9-8{\sin}^2 \beta} x^{(2)}
+\end{align}
+よって，決定境界は，
+\begin{equation}
+	x^{(1)} = -\frac{8 \cos\beta \sin\beta}{9-8{\sin}^2 \beta} x^{(2)}
+\end{equation}
+である。
+
+\end{document}

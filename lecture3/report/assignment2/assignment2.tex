@@ -1,0 +1,74 @@
+\documentclass[class=jsarticle, crop=false, dvipdfmx, fleqn]{standalone}
+\input{../../../preamble}
+\begin{document}
+\section{}
+
+
+
+微分と積分の順序が交換できるとき，
+フィッシャー情報行列について式(\ref{eq:answer})が成立することを示す。
+\begin{align}
+	\bm{F}(\bm{\theta})
+		& \coloneqq \int \qty(\pdv{}{\bm{\theta}} \log{q(\bm{x};\ \bm{\theta})}) \qty(\pdv{}{\bm{\theta}} \log{q(\bm{x};\ \bm{\theta})})^\mathrm{T} q(\bm{x};\ \bm{\theta}) \ \dd\bm{x} \\
+		& = - \int \qty(\pdv{}{\bm{\theta}}{\bm{\theta}^\mathrm{T}} \log{q(\bm{x};\ \bm{\theta})}) q(\bm{x};\ \bm{\theta}) \ \dd\bm{x} \label{eq:answer}
+\end{align}
+
+以下では，簡単のため\(q(\bm{x};\ \bm{\theta})\)を\(q\)と記すこととする。
+\(q, r \in \mathbb{R}\)について，
+\begin{align}
+	& \qty(\pdv{}{\bm{\theta}} \log{q}) q = \pdv{}{\bm{\theta}} q \\
+	& \qty(\pdv{r}{\bm{\theta}})^\mathrm{T} = \pdv{r}{\bm{\theta}^\mathrm{T}}
+\end{align}
+が成立することから，
+\begin{align}
+	\bm{F}(\bm{\theta})
+		& \coloneqq \int \qty(\pdv{}{\bm{\theta}} \log{q}) \qty(\pdv{}{\bm{\theta}} \log{q})^\mathrm{T} q \ \dd\bm{x} \\
+		& = \int \qty(\pdv{}{\bm{\theta}} \log{q}) q \cdot \qty(\pdv{}{\bm{\theta}} \log{q})^\mathrm{T} \dd\bm{x} \\
+		& = \int \pdv{q}{\bm{\theta}} \qty(\pdv{}{\bm{\theta}^\mathrm{T}} \log{q}) \ \dd\bm{x} \label{eq:1}
+\end{align}
+となる。
+
+いま，
+\begin{equation}
+	G(\bm{\theta}) \coloneqq \int \pdv{}{\bm{\theta}} \qty(q \pdv{r}{\bm{\theta}^\mathrm{T}}) \ \dd\bm{x}
+\end{equation}
+なる\(G\)について，
+微分と積分の順序が交換できるとき，
+\begin{align}
+	G(\bm{\theta})
+		& = \int \pdv{}{\bm{\theta}} \qty(q \pdv{r}{\bm{\theta}^\mathrm{T}}) \ \dd\bm{x} \\
+		& = \pdv{}{\bm{\theta}} \qty(\int q \pdv{r}{\bm{\theta}^\mathrm{T}} \ \dd\bm{x}) \\
+		& = \pdv{}{\bm{\theta}} \qty{\int q \dd\bm{x} \cdot \pdv{r}{\bm{\theta}^\mathrm{T}} - \int \qty(\int q \dd\bm{x}) \cdot \pdv{}{\bm{x}} \qty(\pdv{r}{\bm{\theta}^\mathrm{T}}) \ \dd\bm{x}}
+\end{align}
+が成立する。ここで，
+\begin{equation}
+	\int q \dd\bm{x} = 1
+\end{equation}
+から，
+\begin{align}
+	G(\bm{\theta})
+		& = \pdv{}{\bm{\theta}} \qty(\pdv{r}{\bm{\theta}^\mathrm{T}} - \int \pdv{}{\bm{x}} \qty(\pdv{r}{\bm{\theta}^\mathrm{T}}) \ \dd\bm{x}) \\
+		& = \pdv{}{\bm{\theta}} \qty(\pdv{r}{\bm{\theta}^\mathrm{T}} - \pdv{r}{\bm{\theta}^\mathrm{T}}) \\
+		& = \bm{0}
+\end{align}
+となる。
+また，\(G\)について，次式も成立する。
+\begin{align}
+	G(\bm{\theta})
+		& = \int \pdv{}{\bm{\theta}} \qty(q \pdv{r}{\bm{\theta}^\mathrm{T}}) \ \dd\bm{x} \\
+		& = \int \qty(\pdv{q}{\bm{\theta}} \pdv{r}{\bm{\theta}^\mathrm{T}} + q \pdv{r}{\bm{\theta}}{\bm{\theta}^\mathrm{T}})\ \dd\bm{x}
+\end{align}
+これらのことから，\(r = \log{q}\)とすれば，
+\begin{equation}
+	\int \pdv{q}{\bm{\theta}} \qty(\pdv{}{\bm{\theta}^\mathrm{T}} \log{q} )\ \dd\bm{x} = - \int q \qty(\pdv{}{\bm{\theta}}{\bm{\theta}^\mathrm{T}} \log{q})\ \dd\bm{x} \label{eq:2}
+\end{equation}
+が成立することがわかる。
+
+式(\ref{eq:1})，(\ref{eq:2})から，
+\begin{align}
+	\bm{F}(\bm{\theta}) = - \int \qty(\pdv{}{\bm{\theta}}{\bm{\theta}^\mathrm{T}} \log{q}) q\ \dd\bm{x}
+\end{align}
+が示される。
+
+
+\end{document}

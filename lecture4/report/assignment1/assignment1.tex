@@ -1,0 +1,178 @@
+\documentclass[class=jsarticle, crop=false, dvipdfmx, fleqn]{standalone}
+\input{../../../preamble}
+\begin{document}
+\section{}
+
+ガウス混合分布の最尤推定量が満たす関係式を求める。
+
+ガウス混合モデルは次のように表される。
+ここで，\(m\)は混合数である。
+\begin{align}
+    & q(\bm{x};\ \bm{\theta})
+        = \sum_{j=1}^{m} w_j \phi(\bm{x};\ \bm{\mu}_j, \sigma_j) \\
+    & w_j \ge 0, \quad \sum_{j=1}^{m} w_j = 1
+        \label{eq:w_restriction} \\
+    & \bm{\theta} =
+        \begin{bmatrix}
+            w_1 & \cdots & w_m
+            & \bm{\mu}_1^\mathrm{T} & \cdots & \bm{\mu}_m^\mathrm{T}
+            & \sigma_1 & \cdots & \sigma_m
+        \end{bmatrix}^\mathrm{T} \\
+    & w_j \in \mathbb{R},\ \bm{\mu}_j \in \mathbb{R}^d,\ \sigma_j \in \mathbb{R}_{>0} \\
+    & \phi(\bm{x};\ \bm{\mu}, \sigma)
+        = \frac{1}{(2\pi\sigma^2)^{d/2}} \exp(-\frac{1}{2\sigma^2} (\bm{x}-\bm{\mu})^\mathrm{T}(\bm{x}-\bm{\mu}))
+\end{align}
+いま，\(w_j\)を\(\gamma_j \in \mathbb{R}\)を用いて次のように表すことで，
+式(\ref{eq:w_restriction})の\(w_j\)の拘束条件を自動的に満たすことができる。
+\begin{equation}
+    w_j = \frac{\exp(\gamma_j)}{\sum_{j'=1}^{m} \exp(\gamma_{j'})}
+        \label{eq:gamma2w}
+\end{equation}
+いま，\(q(\bm{x}_i;\ \bm{\theta}) = q_i,\ \phi(\bm{x}_i;\ \bm{\mu}_j, \sigma_j) = \phi_{ij}\)と表すと，
+対数尤度は次のように表される。
+\begin{align}
+    \log(L(\bm{\theta}))
+        & = \sum_{i=1}^{n} \log{q_i} \\
+        & = \sum_{i=1}^{n} \log\qty{\sum_{j=1}^{m} w_j \phi_{ij}}
+\end{align}
+最尤推定量を与える\(\bm{\theta}\)について，
+\(\pdv*{\log{L}}{\bm{\theta}} = \bm{0}\)が成り立つから，
+\(j = 1,\ \cdots,\ m\)について次式が成り立つ。
+\begin{equation}
+    \pdv{\log{L}}{\gamma_j} = 0, \quad
+    \pdv{\log{L}}{\bm{\mu}_j} = \bm{0}, \quad
+    \pdv{\log{L}}{\sigma_j} = 0
+\end{equation}
+また，対数尤度の，\(\bm{\theta}\)のうち一部のパラメータ\(\bm{\psi}\)による偏微分は次のようになる。
+\begin{align}
+    \pdv{}{\bm{\psi}} \qty(\log(L(\bm{\theta})))
+        & = \pdv{}{\bm{\psi}} \qty(\sum_{i=1}^{n} \log{q_i}) \\
+        & = \sum_{i=1}^{n} \frac{1}{q_i} \pdv{q_i}{\bm{\psi}}
+            \label{eq:pdv_ll_general}
+\end{align}
+
+まず，対数尤度の\(\gamma_j\)による偏微分を考える。
+いま，式(\ref{eq:gamma2w})から，
+\begin{align}
+    \pdv{w_j}{\gamma_j}
+        & = \pdv{}{\gamma_j} \qty(\frac{\exp(\gamma_j)}{\sum_{j'=1}^{m} \exp(\gamma_{j'})}) \\
+        & = \exp(\gamma_j) \cdot \frac{1}{\sum_{j'=1}^{m} \exp(\gamma_{j'})}
+            + \exp(\gamma_j) \cdot \frac{-\exp(\gamma_j)}{\qty(\sum_{j'=1}^{m} \exp(\gamma_{j'}))^2} \\
+        & = \frac{\exp(\gamma_j)}{\sum_{j'=1}^{m} \exp(\gamma_{j'})} - \qty(\frac{\exp(\gamma_j)}{\sum_{j'=1}^{m} \exp(\gamma_{j'})})^2 \\
+        & = w_j - {w_j}^2 \\
+        & = w_j (1 - w_j)
+\end{align}
+\begin{align}
+    \pdv{w_k}{\gamma_j}
+        & = \pdv{}{\gamma_j} \qty(\frac{\exp(\gamma_k)}{\sum_{j'=1}^{m} \exp(\gamma_{j'})}) \\
+        & = \exp(\gamma_k) \qty(\frac{-\exp(\gamma_j)}{\qty(\sum_{j'=1}^{m} \exp(\gamma_{j'}))^2}) \\
+        & = - \frac{\exp(\gamma_j)}{\sum_{j'=1}^{m} \exp(\gamma_{j'})} \cdot \frac{\exp(\gamma_k)}{\sum_{j'=1}^{m} \exp(\gamma_{j'})} \\
+        & = - w_j w_k
+\end{align}
+よって，\(q_i\)の\(\gamma_j\)による偏微分は，
+\begin{align}
+    \pdv{q_i}{\gamma_j}
+        & = \pdv{}{\gamma_j} \qty(\sum_{j=1}^{m} w_j \phi_{ij}) \\
+        & = \sum_{k = 1, k \neq j}^{m} (- w_j w_k)\phi_{ik} + w_j (1 - w_j)\phi_{ij} \\
+        & = - w_j \sum_{k=1}^{m} (w_k \phi_{ik}) + w_j \phi_{ij} \\
+        & = w_j \phi_{ij} - w_j q_i
+\end{align}
+従って，式(\ref{eq:pdv_ll_general})を用いることで，
+対数尤度の\(\gamma_j\)による偏微分は次のようになる。
+\begin{align}
+    \pdv{}{\gamma_j} \qty(\log(L(\bm{\theta})))
+        & = \sum_{i=1}^{n} \frac{1}{q_i} \pdv{q_i}{\gamma_j} \\
+        & = \sum_{i=1}^{n} \frac{1}{q_i} \qty(w_j \phi_{ij} - w_j q_i) \\
+        & = \sum_{i=1}^{n} \qty(\frac{w_j \phi_{ij}}{q_i} - w_j)
+\end{align}
+ここで，
+\begin{align}
+    \eta_{ij}
+        & = \frac{w_j \phi_{ij}}{q_i}
+        = \frac{w_j \phi(\bm{x}_i;\ \bm{\mu}_j, \sigma_j)}{q(\bm{x}_i;\ \bm{\theta})} \\
+        & = \frac{w_j \phi(\bm{x}_i;\ \bm{\mu}_j, \sigma_j)}{\sum_{j'=1}^{b} w_{j'} \phi(\bm{x}_i;\ \bm{\mu}_{j'}, \sigma_{j'})}
+            \label{eq:eta}
+\end{align}
+なる\(\eta_{ij}\)を用いると，結局，
+\begin{align}
+    \pdv{}{\gamma_j} \qty(\log(L(\bm{\theta})))
+        & = \sum_{i=1}^{n} \eta_{ij} - n w_j
+\end{align}
+これが0となるときに最尤推定量となるので，
+\begin{equation}
+    \hat{w}_j = \frac{1}{n} \sum_{i=1}^{n} \hat{\eta}_{ij}
+        \label{eq:gamma_mle}
+\end{equation}
+を得る。
+
+次に，対数尤度の\(\bm{\mu}_j\)による偏微分を考える。
+\(\phi_{ij}\)の\(\bm{\mu}_j\)による偏微分は次のようになる。
+\begin{align}
+    \pdv{\phi_{ij}}{\bm{\mu}_j}
+        & = \pdv{}{\bm{\mu}_j} \qty(\frac{1}{(2\pi\sigma_j^2)^{d/2}} \exp(-\frac{1}{2\sigma_j^2} (\bm{x}_i-\bm{\mu}_j)^\mathrm{T}(\bm{x}_i-\bm{\mu}_j))) \\
+        & = \frac{1}{(2\pi\sigma_j^2)^{d/2}} \cdot \qty(-\frac{1}{2\sigma_j^2}) \cdot 2(\bm{\mu}_j - \bm{x}_i) \cdot \exp(-\frac{1}{2\sigma_j^2} (\bm{x}_i-\bm{\mu}_j)^\mathrm{T}(\bm{x}_i-\bm{\mu}_j)) \\
+        & = \frac{1}{\sigma_j^2} (\bm{x}_i-\bm{\mu}_j) \phi_{ij}
+\end{align}
+よって，\(q_i\)の\(\bm{\mu}_j\)による偏微分は，
+\begin{align}
+    \pdv{q_i}{\bm{\mu}_j}
+        & = \pdv{}{\bm{\mu}_j} \qty(\sum_{j=1}^{m} w_j \phi_{ij}) \\
+        & = w_j \pdv{\phi_{ij}}{\bm{\mu}_j} \\
+        & = w_j \frac{1}{\sigma_j^2} (\bm{x}_i-\bm{\mu}_j) \phi_{ij} \\
+        & = w_j \phi_{ij} \cdot \frac{1}{\sigma_j^2} (\bm{x}_i-\bm{\mu}_j)
+\end{align}
+式(\ref{eq:pdv_ll_general})から，
+対数尤度の\(\bm{\mu}_j\)による偏微分は次のようになる。
+\begin{align}
+    \pdv{}{\bm{\mu}_j} \qty(\log(L(\bm{\theta})))
+        & = \sum_{i=1}^{n} \frac{1}{q_i} \pdv{q_i}{\bm{\mu}_j} \\
+        & = \sum_{i=1}^{n} \frac{1}{q_i} \qty(w_j \phi_{ij} \cdot \frac{1}{\sigma_j^2} (\bm{x}_i-\bm{\mu}_j)) \\
+        & = \frac{1}{\sigma_j^2} \qty(\sum_{i=1}^{n} \frac{w_j \phi_{ij}}{q_i} \bm{x}_i - \bm{\mu}_j \sum_{i=1}^{n} \frac{w_j \phi_{ij}}{q_i}) \\
+        & = \frac{1}{\sigma_j^2} \qty(\sum_{i=1}^{n} \eta_{ij} \bm{x}_i - \bm{\mu}_j \sum_{i=1}^{n} \eta_{ij})
+\end{align}
+これが\(\bm{0}\)となるときに最尤推定量となるので，
+\begin{equation}
+    \hat{\bm{\mu}}_j = \frac{\sum_{i=1}^{n} \hat{\eta}_{ij} \bm{x}_i}{\sum_{i=1}^{n} \hat{\eta}_{ij}}
+        \label{eq:mu_mle}
+\end{equation}
+を得る。
+
+最後に，対数尤度の\(\sigma_j\)による偏微分を考える。
+\(\phi_{ij}\)の\(\sigma_j\)による偏微分は次のようになる。
+\begin{align}
+    \pdv{\phi_{ij}}{\sigma_j}
+        & = \pdv{}{\sigma_j} \qty(\frac{1}{(2\pi\sigma_j^2)^{d/2}} \exp(-\frac{1}{2\sigma_j^2} (\bm{x}_i-\bm{\mu}_j)^\mathrm{T}(\bm{x}_i-\bm{\mu}_j))) \\
+        & = \frac{1}{(2\pi)^{d/2}} \frac{-d}{{\sigma_j}^{d+1}} \exp(-\frac{1}{2\sigma_j^2} (\bm{x}_i-\bm{\mu}_j)^\mathrm{T}(\bm{x}_i-\bm{\mu}_j)) \\
+        & \ \qquad + \frac{1}{(2\pi)^{d/2}} \frac{1}{{\sigma_j}^d} \qty{-\frac{-2}{2 {\sigma_j}^3} (\bm{x}_i-\bm{\mu}_j)^\mathrm{T}(\bm{x}_i-\bm{\mu}_j)} \exp(-\frac{1}{2\sigma_j^2} (\bm{x}_i-\bm{\mu}_j)^\mathrm{T}(\bm{x}_i-\bm{\mu}_j)) \\
+        & = \frac{1}{(2\pi\sigma_j^2)^{d/2}} \exp(-\frac{1}{2\sigma_j^2} (\bm{x}_i-\bm{\mu}_j)^\mathrm{T}(\bm{x}_i-\bm{\mu}_j)) \qty{- \frac{d}{\sigma_j} + \frac{1}{{\sigma_j}^3} (\bm{x}_i-\bm{\mu}_j)^\mathrm{T}(\bm{x}_i-\bm{\mu}_j)} \\
+        & = \phi_{ij} \qty{- \frac{d}{\sigma_j} + \frac{1}{{\sigma_j}^3} (\bm{x}_i-\bm{\mu}_j)^\mathrm{T}(\bm{x}_i-\bm{\mu}_j)}
+\end{align}
+よって，\(q_i\)の\(\sigma_j\)による偏微分は，
+\begin{align}
+    \pdv{q_i}{\sigma_j}
+        & = \pdv{}{\sigma_j} \qty(\sum_{j=1}^{m} w_j \phi_{ij}) \\
+        & = w_j \pdv{\phi_{ij}}{\sigma_j} \\
+        & = w_j \phi_{ij} \qty{- \frac{d}{\sigma_j} + \frac{1}{{\sigma_j}^3} (\bm{x}_i-\bm{\mu}_j)^\mathrm{T}(\bm{x}_i-\bm{\mu}_j)}
+\end{align}
+式(\ref{eq:pdv_ll_general})から，
+対数尤度の\(\sigma_j\)による偏微分は次のようになる。
+\begin{align}
+    \pdv{}{\sigma_j} \qty(\log(L(\bm{\theta})))
+        & = \sum_{i=1}^{n} \frac{1}{q_i} \pdv{q_i}{\sigma_j} \\
+        & = \sum_{i=1}^{n} \frac{1}{q_i} w_j \phi_{ij} \qty{- \frac{d}{\sigma_j} + \frac{1}{{\sigma_j}^3} (\bm{x}_i-\bm{\mu}_j)^\mathrm{T}(\bm{x}_i-\bm{\mu}_j)} \\
+        & = \frac{1}{{\sigma_j}^3} \sum_{i=1}^{n} \frac{w_j \phi_{ij}}{q_i} (\bm{x}_i-\bm{\mu}_j)^\mathrm{T}(\bm{x}_i-\bm{\mu}_j) - \frac{d}{\sigma_j} \sum_{i=1}^{n} \frac{w_j \phi_{ij}}{q_i} \\
+        & = \frac{1}{{\sigma_j}^3} \sum_{i=1}^{n} \eta_{ij} (\bm{x}_i-\bm{\mu}_j)^\mathrm{T}(\bm{x}_i-\bm{\mu}_j) - \frac{d}{\sigma_j} \sum_{i=1}^{n} \eta_{ij}
+\end{align}
+これが\(\bm{0}\)となるときに最尤推定量となるので，
+\begin{align}
+    & {\hat{\sigma}_j}^2 = \frac{1}{d} \frac{\sum_{i=1}^{n} \hat{\eta}_{ij} (\bm{x}_i-\hat{\bm{\mu}}_j)^\mathrm{T}(\bm{x}_i-\hat{\bm{\mu}}_j)}{\sum_{i=1}^{n} \hat{\eta}_{ij}} \\
+    & \hat{\sigma}_j = \sqrt{\frac{1}{d} \frac{\sum_{i=1}^{n} \hat{\eta}_{ij} (\bm{x}_i-\hat{\bm{\mu}}_j)^\mathrm{T}(\bm{x}_i-\hat{\bm{\mu}}_j)}{\sum_{i=1}^{n} \hat{\eta}_{ij}}}
+        \label{eq:sigma_mle}
+\end{align}
+を得る。
+
+以上，式(\ref{eq:eta})，(\ref{eq:gamma_mle})，(\ref{eq:mu_mle})，(\ref{eq:sigma_mle})が，
+ガウス混合分布の最尤推定量の関係式である。
+
+
+\end{document}
