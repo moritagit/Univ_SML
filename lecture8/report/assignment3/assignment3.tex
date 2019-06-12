@@ -1,0 +1,61 @@
+\documentclass[dvipdfmx, fleqn]{jsarticle}
+\input{/Users/User/Documents/University/report_template/preamble/preamble}
+\title{
+	統計的機械学習 \\
+    第八回　レポート ID: 03
+    }
+\author{37-196360 \quad 森田涼介}
+\begin{document}
+\maketitle
+
+ベイズ推定の逐次合理性を示す。
+データ\(x_{1:n} = (x_1,\ \cdots,\ x_n)\)について，
+条件付き独立性を仮定すると，尤度は，
+\begin{equation}
+    p(x_{1:n}|\theta) = \prod_{i=1}^{n} p(x_i | \theta)
+    \label{eq:likelihood}
+\end{equation}
+また，De Finettiの定理より，確率変数の列\(x_{1:n}\)が交換可能であるとき，
+任意\(n\)に対して次が成立する。
+\begin{equation}
+    p(x_{1:n}) = \int \prod_{i=1}^{n} p(x_i | \theta) p(\theta) \dd\theta
+    \label{eq:marginalization}
+\end{equation}
+これより，事前分布を\(p(\theta)\)とすると，事後分布は，
+\begin{equation}
+    p(\theta|x_{1:n}) = \frac{p(x_{1:n} | \theta) p(\theta)}{p(x_{1:n})}
+    \label{eq:posterior}
+\end{equation}
+となる。
+式(\ref{eq:likelihood})を用いると，
+\begin{align*}
+    p(x_{1:n} | \theta) p(\theta)
+        & = \prod_{i=1}^{n} p(x_i | \theta) p(\theta) \\
+        & = p(x_n | \theta) \prod_{i=1}^{n-1} p(x_i | \theta) p(\theta) \\
+        & = p(x_n | \theta) p(x_{1:n-1} | \theta) p(\theta)
+\end{align*}
+ベイズの定理より，
+\begin{equation*}
+    p(x_{1:n-1} | \theta) p(\theta) = p(\theta | x_{1:n-1}) p(x_{1:n-1})
+\end{equation*}
+が成立するので，結局，
+\begin{equation}
+    p(x_{1:n} | \theta) p(\theta) = p(x_n | \theta) p(\theta | x_{1:n-1}) p(x_{1:n-1})
+    \label{eq:sequentialization}
+\end{equation}
+式(\ref{eq:marginalization})，(\ref{eq:posterior})，(\ref{eq:sequentialization})から，
+\begin{align*}
+    p(\theta|x_{1:n})
+        & = \frac{p(x_{1:n} | \theta) p(\theta)}{p(x_{1:n})} \\
+        & = \frac{p(x_n | \theta) p(\theta | x_{1:n-1}) p(x_{1:n-1})}{\int p(x_n | \theta) p(\theta | x_{1:n-1}) p(x_{1:n-1}) \dd\theta} \\
+        & = \frac{p(x_n | \theta) p(\theta | x_{1:n-1})}{\int p(x_n | \theta) p(\theta | x_{1:n-1}) \dd\theta}
+\end{align*}
+これより，\(p(\theta | x_{1:n-1})\)を事前分布とすると，
+事後分布は，
+\begin{equation}
+    p(\theta|x_{1:n}) = \frac{p(x_n | \theta) p(\theta | x_{1:n-1})}{\int p(x_n | \theta) p(\theta | x_{1:n-1}) \dd\theta}
+\end{equation}
+と表すことができ，逐次性を持つことが示された。
+
+
+\end{document}
