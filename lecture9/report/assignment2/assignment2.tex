@@ -1,0 +1,71 @@
+\documentclass[dvipdfmx, fleqn]{jsarticle}
+\input{/Users/User/Documents/University/report_template/preamble/preamble}
+\title{
+	統計的機械学習 \\
+    第九回　レポート ID: 02
+    }
+\author{37-196360 \quad 森田涼介}
+\begin{document}
+\maketitle
+
+
+以下の，周辺尤度とKL情報量の関係を導出する。
+\begin{equation}
+    \log{p(x_{1:n} | \eta)} - L\qty[q(z_{1:n}) q(\theta); x_{1:n}] = \mathrm{KL}\qty[q(z_{1:n}) q(\theta) | p(z_{1:n}, \theta | x_{1:n}, \eta)]
+\end{equation}
+
+データ\(x_{1:n}\)の生成確率の周辺尤度からその変分下限を得る。
+\begin{align}
+    \log{p(x_{1:n} | \eta)}
+        & = \log{\int p(x_{1:n}, z_{1:n}, \theta | \eta) \dd{z_{1:n}} \dd{\theta}} \\
+        & = \log{\int q(z_{1:n}) q(\theta) \frac{p(x_{1:n}, z_{1:n}, \theta | \eta)}{q(z_{1:n}) q(\theta)} \dd{z_{1:n}} \dd{\theta}} \\
+        & \ge \int q(z_{1:n}) q(\theta) \log{\frac{p(x_{1:n}, z_{1:n}, \theta | \eta)}{q(z_{1:n}) q(\theta)}} \dd{z_{1:n}} \dd{\theta} \\
+        & \equiv L\qty[q(z_{1:n}) q(\theta); x_{1:n}]
+\end{align}
+また，KL情報量（Kullback-Leibler Divergence）は一般に，
+\begin{equation}
+    \mathrm{KL}\qty[q(\theta) | p(\theta)] = \int q(\theta) \log{\frac{q(\theta)}{p(\theta)}} \dd\theta
+\end{equation}
+と表されるから，
+\begin{equation}
+    \mathrm{KL}\qty[q(z_{1:n}) q(\theta) | p(z_{1:n}, \theta | x_{1:n}, \eta)]
+        = \int q(z_{1:n}) q(\theta) \log{\frac{q(z_{1:n}) q(\theta)}{p(z_{1:n}, \theta | x_{1:n}, \eta)}}  \dd{z_{1:n}} \dd{\theta}
+\end{equation}
+である。
+ここで，
+\begin{align}
+    \frac{p(x_{1:n}, z_{1:n}, \theta | \eta)}{p(z_{1:n}, \theta | x_{1:n}, \eta)}
+        & = \frac{p(x_{1:n},\ z_{1:n},\ \theta,\ \eta)}{p(\eta)} \cdot \frac{p(x_{1:n},\ \eta)}{p(x_{1:n},\ z_{1:n},\ \theta,\ \eta)} \\
+        & = \frac{p(x_{1:n},\ \eta)}{p(\eta)} \\
+        & = p(x_{1:n} | \eta)
+\end{align}
+であることに注意すると，
+変分下限とKL情報量の和は，
+\begin{align}
+    & L\qty[q(z_{1:n}) q(\theta); x_{1:n}] + \mathrm{KL}\qty[q(z_{1:n}) q(\theta) | p(z_{1:n}, \theta | x_{1:n}, \eta)] \\
+    & \ \qquad
+        = \int q(z_{1:n}) q(\theta) \log{\frac{p(x_{1:n}, z_{1:n}, \theta | \eta)}{q(z_{1:n}) q(\theta)}} \dd{z_{1:n}} \dd{\theta} + \int q(z_{1:n}) q(\theta) \log{\frac{q(z_{1:n}) q(\theta)}{p(z_{1:n}, \theta | x_{1:n}, \eta)}}  \dd{z_{1:n}} \dd{\theta} \\
+    & \ \qquad
+        = \int q(z_{1:n}) q(\theta) \log{\frac{p(x_{1:n}, z_{1:n}, \theta | \eta)}{p(z_{1:n}, \theta | x_{1:n}, \eta)}} \dd{z_{1:n}} \dd{\theta} \\
+    & \ \qquad
+        = \int q(z_{1:n}) q(\theta) \log{p(x_{1:n} | \eta)} \dd{z_{1:n}} \dd{\theta}
+\end{align}
+となる。
+いま，\(q(z_{1:n}),\ q(\theta)\)は確率密度より
+\begin{equation}
+    \int q(z_{1:n}) \dd{z_{1:n}} = \int q(\theta) \dd{\theta} = 1
+\end{equation}
+であること，
+及び\(\log{p(x_{1:n} | \eta)}\)は\(z_{1:n},\ \theta\)に依存しないことから，
+結局，
+\begin{equation}
+    L\qty[q(z_{1:n}) q(\theta); x_{1:n}] + \mathrm{KL}\qty[q(z_{1:n}) q(\theta) | p(z_{1:n}, \theta | x_{1:n}, \eta)] = \log{p(x_{1:n} | \eta)}
+\end{equation}
+よって，
+\begin{equation}
+    \log{p(x_{1:n} | \eta)} - L\qty[q(z_{1:n}) q(\theta); x_{1:n}] = \mathrm{KL}\qty[q(z_{1:n}) q(\theta) | p(z_{1:n}, \theta | x_{1:n}, \eta)]
+\end{equation}
+
+
+
+\end{document}

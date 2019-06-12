@@ -1,0 +1,42 @@
+\documentclass[dvipdfmx, fleqn]{jsarticle}
+\input{/Users/User/Documents/University/report_template/preamble/preamble}
+\title{
+	統計的機械学習 \\
+	第九回　レポート ID: 01
+	}
+\author{37-196360 \quad 森田涼介}
+\begin{document}
+\maketitle
+
+
+
+あるデータ\(x_i\)について，
+その潜在変数を\(z_i\)とし，
+また，事前分布のパラメータを\(\theta\)と表す。
+Jensenの不等式を用いることで，
+次のように変分下限\(L\)が求まる。
+\begin{align}
+    \log{p_{\theta} (x_i)}
+        & = \log{\int p_{\theta} (x_i,\ z_i) \dd{z}}
+            \qquad (\text{潜在変数\(z_i\)は観測できないため周辺化}) \\
+        & = \log{\int q(z_i) \frac{p_{\theta} (x_i,\ z_i)}{q(z_i)} \dd{z}} \\
+        & = \log{E_{q(z_i)} \qty[\frac{p_{\theta} (x_i,\ z_i)}{q(z_i)}]} \\
+        & \ge E_{q(z_i)} \qty[\log{\frac{p_{\theta} (x_i,\ z_i)}{q(z_i)}}]
+            \qquad (\because \text{Jensenの不等式}) \\
+        & = \int q(z_i) \log{\frac{p_{\theta} (x_i,\ z_i)}{q(z_i)}} \dd{z_i} \\
+        & = \int q(z_i) \log{\frac{p_{\theta} (x_i | z_i) p(z_i)}{q(z_i)}} \dd{z_i} \\
+        & \equiv L\qty[q(z_i),\ \theta;\ x_i]
+\end{align}
+これを用いると，
+複数のデータ\(x_{1:n}\)があるとき，
+その生成確率の対数尤度と変分下限は次のようになる。
+\begin{align}
+    \log{p_{\theta} (x_{1:n})}
+        & = \log{\prod_{i=1}^{n} p_{\theta} (x_i)} \\
+        & = \sum_{i=1}^{n} \log{p_{\theta} (x_i)} \\
+        & \ge \sum_{i=1}^{n} L\qty[q(z_i),\ \theta;\ x_i]
+\end{align}
+
+
+
+\end{document}
