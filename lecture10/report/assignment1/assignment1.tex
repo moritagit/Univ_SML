@@ -1,0 +1,83 @@
+\documentclass[class=jsarticle, crop=false, dvipdfmx, fleqn]{standalone}
+\input{/Users/User/Documents/University/report_template/preamble/preamble}
+\begin{document}
+
+\section*{宿題1}
+
+\(q(\bm{u}_j)\)について次の比例式が成立する。
+\begin{equation}
+    q(\bm{u}_j) \propto p(\bm{u}_j | \bm{\Lambda}_u) \exp{\sum_{j,\ i \in \mathcal{O}} \int q(\bm{v}_i) \log{p(r_{j,\ i} | \bm{u}_j^\mathrm{T} \bm{v}_i,\ \sigma^2)} \dd{\bm{v}_i}}
+    \label{eq:q_u_margin}
+\end{equation}
+ここで，\(p(\bm{u}_j | \bm{\Lambda}_u)\)について，
+\begin{equation}
+    p(\bm{u}_j | \bm{\Lambda}_u) \propto \exp(- \frac{1}{2} \bm{u}_j^\mathrm{T} \bm{\Lambda}_u \bm{u}_j)
+    \label{eq:p_u_cond}
+\end{equation}
+が成立する。
+また，
+\begin{align}
+    l_{u,\ i,\ j}
+        & \equiv \int q(\bm{v}_i) \log{p(r_{j,\ i} | \bm{u}_j^\mathrm{T} \bm{v}_i,\ \sigma^2)} \dd{\bm{v}_i} \\
+        & = - \frac{1}{2 \sigma^2} \int q(\bm{v}_i) (r_{j,\ i} - \bm{u}_j^\mathrm{T} \bm{v}_i)^2 \dd{\bm{v}_i} \notag \\
+        & = - \frac{1}{2 \sigma^2} \int q(\bm{v}_i) \qty(r_{j,\ i}^2 - 2 r_{j,\ i} \bm{u}_j^\mathrm{T} \bm{v}_i + \bm{u}_j^\mathrm{T} \bm{v}_i \bm{v}_i^\mathrm{T} \bm{u}_j) \dd{\bm{v}_i} \notag \\
+        & = - \frac{1}{2 \sigma^2} \qty(r_{j,\ i}^2 - 2 r_{j,\ i} \bm{u}_j^\mathrm{T} \mathbb{E}_{q(\bm{v}_i)} \qty[\bm{v}_i] + \bm{u}_j^\mathrm{T} \mathbb{E}_{q(\bm{v}_i)} \qty[\bm{v}_i \bm{v}_i^\mathrm{T}] \bm{u}_j)
+        \label{eq:l_u}
+\end{align}
+となる。
+式(\ref{eq:q_u_margin})，(\ref{eq:p_u_cond})，(\ref{eq:l_u})から，
+\begin{align}
+    q(\bm{u}_j)
+        & \propto \exp(- \frac{1}{2} \bm{u}_j^\mathrm{T} \bm{\Lambda}_u \bm{u}_j) \exp{\sum_{j,\ i \in \mathcal{O}} l_{u,\ i,\ j}} \notag \\
+        & = \exp(- \frac{1}{2} \bm{u}_j^\mathrm{T} \bm{\Lambda}_u \bm{u}_j) \exp{\sum_{j,\ i \in \mathcal{O}} - \frac{1}{2 \sigma^2} \qty(r_{j,\ i}^2 - 2 r_{j,\ i} \bm{u}_j^\mathrm{T} \mathbb{E}_{q(\bm{v}_i)} \qty[\bm{v}_i] + \bm{u}_j^\mathrm{T} \mathbb{E}_{q(\bm{v}_i)} \qty[\bm{v}_i \bm{v}_i^\mathrm{T}] \bm{u}_j)} \notag \\
+        & = \exp{- \frac{1}{2 \sigma^2} \qty(-2\bm{u}_j \qty(\sum_{j,\ i \in \mathcal{O}} r_{j,\ i} \mathbb{E}_{q(\bm{v}_i)} \qty[\bm{v}_i]) + \bm{u}_j^\mathrm{T} \qty(\sum_{j,\ i \in \mathcal{O}} \mathbb{E}_{q(\bm{v}_i)} \qty[\bm{v}_i \bm{v}_i^\mathrm{T}] + \sigma^2 \bm{\Lambda}_u) \bm{u}_j)}
+        \label{eq:q_u}
+\end{align}
+いま，多次元正規分布に従う確率変数\(\bm{x}\)について次が成立する。
+\begin{equation}
+    q(\bm{x})
+        = \mathcal{N}(\bm{x} | \bm{\mu},\ \bm{\Sigma})
+        \propto \exp{-\frac{1}{2} \qty(\bm{x}^\mathrm{T} \bm{\Sigma}^{-1} \bm{x} - 2\bm{x} \bm{\Sigma}^{-1} \bm{\mu})}
+    \label{eq:multi_normal}
+\end{equation}
+これと式(\ref{eq:q_u})を比べると，
+\begin{align}
+    & q(\bm{u}_j) = \mathcal{N}(\bm{u}_j | \bm{\mu}_{u,\ j},\ \bm{V}_{u,\ j}) \\
+    & \bm{V}_{u,\ j}^{-1} \bm{\mu}_{u,\ j} = \frac{1}{\sigma^2} \sum_{j,\ i \in \mathcal{O}} r_{j,\ i} \mathbb{E}_{q(\bm{v}_i)} \qty[\bm{v}_i] \\
+    & \bm{V}_{u,\ j}^{-1} = \frac{1}{\sigma^2} \qty(\sum_{j,\ i \in \mathcal{O}} \mathbb{E}_{q(\bm{v}_i)} \qty[\bm{v}_i \bm{v}_i^\mathrm{T}] + \sigma^2 \bm{\Lambda}_u)
+\end{align}
+となることがわかる。
+これを整理すると，
+\begin{align}
+    & q(\bm{u}_j) = \mathcal{N}(\bm{u}_j | \bm{\mu}_{u,\ j},\ \bm{V}_{u,\ j}) \\
+    & \bm{\mu}_{u,\ j} = \frac{1}{\sigma^2} \bm{V}_{u,\ j} \sum_{j,\ i \in \mathcal{O}} r_{j,\ i} \mathbb{E}_{q(\bm{v}_i)} \qty[\bm{v}_i] \\
+    & \bm{V}_{u,\ j} = \sigma^2 \qty(\sum_{j,\ i \in \mathcal{O}} \mathbb{E}_{q(\bm{v}_i)} \qty[\bm{v}_i \bm{v}_i^\mathrm{T}] + \sigma^2 \bm{\Lambda}_u)^{-1}
+\end{align}
+となる。
+
+同様に，\(\bm{v}_i\)について，
+\begin{align}
+    q(\bm{v}_i)
+        & \propto p(\bm{v}_i | \bm{\Lambda}_v) \exp{\sum_{j,\ i \in \mathcal{O}} \int q(\bm{u}_j) \log{p(r_{j,\ i} | \bm{u}_j^\mathrm{T} \bm{v}_i,\ \sigma^2)} \dd{\bm{u}_j}}
+        \label{eq:q_v_margin} \\
+        & = \exp(- \frac{1}{2} \bm{v}_i^\mathrm{T} \bm{\Lambda}_v \bm{v}_i) \exp{\sum_{j,\ i \in \mathcal{O}} - \frac{1}{2 \sigma^2} \qty(r_{j,\ i}^2 - 2 r_{j,\ i} \bm{v}_i^\mathrm{T} \mathbb{E}_{q(\bm{u}_j)} \qty[\bm{u}_j] + \bm{v}_i^\mathrm{T} \mathbb{E}_{q(\bm{u}_j)} \qty[\bm{u}_j \bm{u}_j^\mathrm{T}] \bm{v}_i)} \notag \\
+        & = \exp{- \frac{1}{2 \sigma^2} \qty(-2\bm{v}_i \qty(\sum_{j,\ i \in \mathcal{O}} r_{j,\ i} \mathbb{E}_{q(\bm{u}_j)} \qty[\bm{u}_j]) + \bm{v}_i^\mathrm{T} \qty(\sum_{j,\ i \in \mathcal{O}} \mathbb{E}_{q(\bm{u}_j)} \qty[\bm{u}_j \bm{u}_j^\mathrm{T}] + \sigma^2 \bm{\Lambda}_v) \bm{v}_i)}
+        \label{eq:q_v}
+\end{align}
+となることから，
+\begin{align}
+    & q(\bm{v}_i) = \mathcal{N}(\bm{v}_i | \bm{\mu}_{v,\ i},\ \bm{V}_{v,\ i}) \\
+    & \bm{V}_{v,\ i}^{-1} \bm{\mu}_{v,\ i} = \frac{1}{\sigma^2} \sum_{j,\ i \in \mathcal{O}} r_{j,\ i} \mathbb{E}_{q(\bm{u}_j)} \qty[\bm{u}_j] \\
+    & \bm{V}_{v,\ i}^{-1} = \frac{1}{\sigma^2} \qty(\sum_{j,\ i \in \mathcal{O}} \mathbb{E}_{q(\bm{u}_j)} \qty[\bm{u}_j \bm{u}_j^\mathrm{T}] + \sigma^2 \bm{\Lambda}_v)
+\end{align}
+を得て，結局，
+\begin{align}
+    & q(\bm{v}_i) = \mathcal{N}(\bm{v}_i | \bm{\mu}_{v,\ i},\ \bm{V}_{v,\ i}) \\
+    & \bm{\mu}_{v,\ i} = \frac{1}{\sigma^2} \bm{V}_{v,\ i} \sum_{j,\ i \in \mathcal{O}} r_{j,\ i} \mathbb{E}_{q(\bm{u}_j)} \qty[\bm{u}_j] \\
+    & \bm{V}_{v,\ i} = \sigma^2 \qty(\sum_{j,\ i \in \mathcal{O}} \mathbb{E}_{q(\bm{u}_j)} \qty[\bm{u}_j \bm{u}_j^\mathrm{T}] + \sigma^2 \bm{\Lambda}_v)^{-1}
+\end{align}
+を得る。
+
+
+
+\end{document}

@@ -1,0 +1,97 @@
+\documentclass[class=jsarticle, crop=false, dvipdfmx, fleqn]{standalone}
+\input{/Users/User/Documents/University/report_template/preamble/preamble}
+\begin{document}
+
+\section*{宿題2}
+
+いま，\(\bm{\mu}_{u,\ j}\)の期待値と分散について，
+\begin{align}
+    \bm{\mu}_{u,\ j}
+        & = \mathbb{E}_{q(\bm{u}_j)} \qty[\bm{u}_j] \\
+    \bm{V}_{u,\ j}
+        & = \mathbb{E}_{q_(\bm{u}_j)} \qty[(\bm{u}_j - \mathbb{E}_{q(\bm{u}_j)} \qty[\bm{u}_j])(\bm{u}_j - \mathbb{E}_{q(\bm{u}_j)} \qty[\bm{u}_j])^\mathrm{T}] \\
+        & = \mathbb{E}_{q(\bm{u}_j)} \qty[\bm{u}_j \bm{u}_j^\mathrm{T}] - \mathbb{E}_{q(\bm{u}_j)} \qty[\bm{u}_j] \mathbb{E}_{q(\bm{u}_j)} \qty[\bm{u}_j]^\mathrm{T} \\
+        & = \mathbb{E}_{q(\bm{u}_j)} \qty[\bm{u}_j \bm{u}_j^\mathrm{T}] - \bm{\mu}_{u,\ j} \bm{\mu}_{u,\ j}^\mathrm{T}
+\end{align}
+が成立する。
+これより，
+\begin{equation}
+    \mathbb{E}_{q(\bm{u}_j)} \qty[\bm{u}_j \bm{u}_j^\mathrm{T}] = \bm{V}_{u,\ j} + \bm{\mu}_{u,\ j} \bm{\mu}_{u,\ j}^\mathrm{T}
+\end{equation}
+となる。
+ここで，
+\begin{equation}
+    \bm{u} \sim \mathcal{N}(\bm{0},\ \bm{\Lambda}_u)
+\end{equation}
+の分散を標本\(\qty{\bm{u}_j}_{j=1}^{J}\)を用いて表すことを考えると，
+平均\(\bm{0}\)から，
+\begin{align}
+    \bm{\Lambda}_u
+        & = \mathbb{E}_{q(\bm{u})} \qty[\bm{u} \bm{u}^\mathrm{T}] \\
+        & = \frac{1}{J} \sum_{j=1}^{J} \mathbb{E}_{q(\bm{u}_j)} \qty[\bm{u}_j \bm{u}_j^\mathrm{T}] \\
+        & = \frac{1}{J} \sum_{j=1}^{J} \qty(\bm{V}_{u,\ j} + \bm{\mu}_{u,\ j} \bm{\mu}_{u,\ j}^\mathrm{T})
+\end{align}
+\(\bm{\Lambda}_u\)は対角成分しか持たないため，
+結局，
+\begin{equation}
+    \rho_{u,\ k}^2 = \frac{1}{J} \sum_{j=1}^{J} \qty(\qty[\bm{V}_{u,\ j}]_{k,\ k} + \mu_{u,\ j,\ k}^2)
+\end{equation}
+
+同様に，\(\bm{v}_i\)の期待値と分散について次式が成立し，
+\begin{equation}
+    \mathbb{E}_{q(\bm{v}_i)} \qty[\bm{v}_i \bm{v}_i^\mathrm{T}] = \bm{V}_{v,\ i} + \bm{\mu}_{v,\ i} \bm{\mu}_{v,\ i}^\mathrm{T}
+\end{equation}
+また，
+\begin{equation}
+    \bm{v} \sim \mathcal{N}(\bm{0},\ \bm{\Lambda}_v)
+\end{equation}
+から，
+\begin{align}
+    \bm{\Lambda}_v
+        & = \mathbb{E}_{q(\bm{v})} \qty[\bm{v} \bm{v}^\mathrm{T}] \\
+        & = \frac{1}{I} \sum_{i=1}^{I} \mathbb{E}_{q(\bm{v}_i)} \qty[\bm{v}_i \bm{v}_i^\mathrm{T}] \\
+        & = \frac{1}{I} \sum_{i=1}^{I} \qty(\bm{V}_{v,\ i} + \bm{\mu}_{v,\ i} \bm{\mu}_{v,\ i}^\mathrm{T})
+\end{align}
+\(\bm{\Lambda}_v\)は対角成分しか持たないため，
+結局，
+\begin{equation}
+    \rho_{v,\ k}^2 = \frac{1}{I} \sum_{i=1}^{I} \qty(\qty[\bm{V}_{v,\ i}]_{k,\ k} + \mu_{v,\ i,\ k}^2)
+\end{equation}
+
+最後に，\(r\)について考える。
+\begin{equation}
+    r \sim \mathcal{N}(\bm{u}^\mathrm{T} \bm{v},\ \sigma^2)
+\end{equation}
+から，
+\begin{align}
+    \sigma^2
+        & = \mathbb{E}_{q(\bm{u}) q(\bm{v})} \qty[(r - \bm{u}^\mathrm{T} \bm{v})^2] \\
+        & = \frac{1}{|\mathcal{O}|} \sum_{(j,\ i) \in \mathcal{O}} \mathbb{E}_{q(\bm{u}_j) q(\bm{v}_i)} \qty[\qty(r_{j,\ i} - \bm{u}_j^\mathrm{T} \bm{v}_i)^2] \\
+        & = \frac{1}{|\mathcal{O}|} \sum_{(j,\ i) \in \mathcal{O}} \mathbb{E}_{q(\bm{u}_j) q(\bm{v}_i)} \qty[r_{j,\ i}^2 - 2 r_{j,\ i} \bm{u}_j^\mathrm{T} \bm{v}_i + \bm{u}_j^\mathrm{T} \bm{v}_i \bm{v}_i^\mathrm{T} \bm{u}_j] \\
+\end{align}
+いま，
+\begin{align}
+    & \mathbb{E}_{q(\bm{u}_j) q(\bm{v}_i)} \qty[r_{j,\ i}^2]
+        = r_{j,\ i}^2 \\
+    & \mathbb{E}_{q(\bm{u}_j) q(\bm{v}_i)} \qty[\bm{u}_j^\mathrm{T} \bm{v}_i]
+        = \mathbb{E}_{q(\bm{u}_j)} \qty[\bm{u}_j^\mathrm{T}] \mathbb{E}_{q(\bm{v}_i)} \qty[\bm{v}_i]
+        = \bm{\mu}_{u,\ i}^\mathrm{T} \bm{v}_{v,\ i}
+\end{align}
+であり，また，
+\begin{align}
+    \mathbb{E}_{q(\bm{u}_j) q(\bm{v}_i)} \qty[\bm{u}_j^\mathrm{T} \bm{v}_i \bm{v}_i^\mathrm{T} \bm{u}_j]
+        & = \mathbb{E}_{q(\bm{u}_j) q(\bm{v}_i)} \qty[\mathrm{Tr}\qty{\bm{v}_i \bm{v}_i^\mathrm{T} \bm{u}_j \bm{u}_j^\mathrm{T}}] \\
+        & = \mathrm{Tr} \qty{\mathbb{E}_{q(\bm{v}_i)} \qty[\bm{v}_i \bm{v}_i^\mathrm{T}] \mathbb{E}_{q(\bm{u}_j)} \qty[\bm{u}_j \bm{u}_j^\mathrm{T}]} \\
+        & = \mathrm{Tr} \qty{\qty(\bm{V}_{u,\ j} + \bm{\mu}_{u,\ j} \bm{\mu}_{u,\ j}^\mathrm{T}) \qty(\bm{V}_{v,\ i} + \bm{\mu}_{v,\ i} \bm{\mu}_{v,\ i}^\mathrm{T})}
+\end{align}
+となることから，結局，
+\begin{equation}
+    \sigma^2
+        = \frac{1}{|\mathcal{O}|} \sum_{(j,\ i) \in \mathcal{O}} \qty{
+            r_{j,\ i}^2 - 2 r_{j,\ i} \bm{\mu}_{u,\ j}^\mathrm{T} \bm{\mu}_{v,\ i} + \mathrm{Tr} \qty{\qty(\bm{V}_{u,\ j} + \bm{\mu}_{u,\ j} \bm{\mu}_{u,\ j}^\mathrm{T}) \qty(\bm{V}_{v,\ i} + \bm{\mu}_{v,\ i} \bm{\mu}_{v,\ i}^\mathrm{T})}} \\
+\end{equation}
+となる。
+
+
+
+\end{document}
