@@ -1,0 +1,128 @@
+\documentclass[class=jsarticle, crop=false, dvipdfmx, fleqn]{standalone}
+\input{/Users/User/Documents/University/report_template/preamble/preamble}
+\begin{document}
+
+\section*{宿題}
+
+観測データ\(\mathcal{D}_{1:n} = \qty{\bm{x}_i,\ y_i}_{i=1}^{n}\ \qty(y_i \in \mathbb{R})\)について，
+以下を仮定する。
+\begin{align}
+    & y_i = f(\bm{x}_i) \quad \qty(i = 1,\ \cdots,\ n ) \\
+    & f \sim \mathcal{GP}(f | m, \kappa)
+\end{align}
+これより，
+\begin{equation}
+    y_i = f(\bm{x}_i) \sim \mathcal{N}(m(\bm{x}_i),\ \kappa(\bm{x}_i,\ \bm{x}_i))
+\end{equation}
+である。
+このとき，未知の入力\(\bm{x}_{*}\)に対する\(f(\bm{x})\)の分布は，
+\begin{equation}
+    p\qty(f(\bm{x}_{*}) | \mathcal{D}_{1:n}) = \mathcal{N}\qty(f(\bm{x}_{*}) | \mu_n (\bm{x}_{*}), \sigma_n^2 (\bm{x}_{*}) )
+\end{equation}
+となる。
+\(\mu_n (\bm{x}_{*}),\ \sigma_n^2 (\bm{x}_{*})\)を解析的に求める。
+
+\(\bm{y} \in \mathbb{R}^{n}\)は平均\(\bm{\mu}\)，分散\(\bm{\Sigma}\)の正規分布\(\mathcal{N}(\bm{\mu},\ \bm{\Sigma})\)に従うとする。
+また，\(\bm{y}_1 \in \mathbb{R}^{l},\ \bm{y}_2 \in \mathbb{R}^{m},\ \qty(l + m = n)\)を用いて，
+\begin{equation}
+    \bm{y} =
+        \begin{bmatrix}
+            \bm{y}_1 \\ \bm{y}_2
+        \end{bmatrix}
+    \label{eq:y_split}
+\end{equation}
+と分割して定義する。
+これに対し，\(\bm{\mu},\ \bm{\Sigma}\)も分割して，
+\begin{align}
+    & \bm{\mu} =
+        \begin{bmatrix}
+            \bm{\mu}_1 \\ \bm{\mu}_2
+        \end{bmatrix} \\
+    & \bm{\Sigma} =
+        \begin{bmatrix}
+            \bm{\Sigma}_{11} & \bm{\Sigma}_{12} \\
+            \bm{\Sigma}_{21} & \bm{\Sigma}_{22}
+        \end{bmatrix}
+\end{align}
+とする。
+\(\bm{y}_1\)が与えられた下での\(\bm{y}_2\)の条件付き確率を次のように仮定する。
+\begin{equation}
+    p(\bm{y}_2 | \bm{y}_1) = \mathcal{N}(\bm{y}_2 | \hat{\bm{\mu}}_2,\ \hat{\bm{\Sigma}}_2)
+\end{equation}
+このとき，次式が成立する。
+\begin{align}
+    & \hat{\bm{\mu}}_2 = \bm{\mu}_2 + \bm{\Sigma}_{21} \bm{\Sigma}_{11}^{-1} \qty(\bm{y}_1 - \bm{\mu}_1) \\
+    & \hat{\bm{\Sigma}}_2 = \bm{\Sigma}_{22} - \bm{\Sigma}_{21} \bm{\Sigma}_{11}^{-1} \bm{\Sigma}_{12}
+    \label{eq:sigma_2_hat}
+\end{align}
+
+いま，
+\begin{align}
+    & \bm{y}_{1:n} =
+        \begin{bmatrix}
+            y_1 & \cdots & y_n
+        \end{bmatrix}^\mathrm{T} \\
+    & \bm{m}(\bm{x}_{1:n}) =
+        \begin{bmatrix}
+            m(\bm{x}_1) & \cdots & m(\bm{x}_n)
+        \end{bmatrix}^\mathrm{T} \\
+    & \bm{K}(\bm{x}_{1:n}) =
+        \begin{bmatrix}
+            \kappa(\bm{x}_1,\ \bm{x}_1) & \cdot & \kappa(\bm{x}_1,\ \bm{x}_n) \\
+            \vdots & \ddots & \vdots \\
+            \kappa(\bm{x}_n,\ \bm{x}_1) & \cdot & \kappa(\bm{x}_n,\ \bm{x}_n) \\
+        \end{bmatrix}
+\end{align}
+と表すと，
+\begin{equation}
+    \bm{y}_{1:n}
+        = f(\bm{x}_{1:n})
+        \sim \mathcal{N}\qty(\bm{m}(\bm{x}_{1:n}),\ \bm{K}(\bm{x}_{1:n}))
+\end{equation}
+であり，また，
+\begin{equation}
+    y_{*} = f(\bm{x}_{*}) \sim \mathcal{N}\qty(m_{*},\ \kappa(\bm{x}_{*},\ \bm{x}_{*}))
+\end{equation}
+である。このとき，
+\begin{equation}
+    \bm{\kappa}(\bm{x}_{*},\ \bm{x}_{1:n}) =
+        \begin{bmatrix}
+            \kappa(\bm{x}_{*},\ \bm{x}_1) & \cdots & \kappa(\bm{x}_{*},\ \bm{x}_n)
+        \end{bmatrix}^\mathrm{T}
+\end{equation}
+とおくと，
+\begin{equation}
+    \begin{bmatrix}
+        \bm{y}_{1:n} \\ y_{*}
+    \end{bmatrix}
+        \sim \mathcal{N}\qty(
+            \begin{bmatrix}
+                \bm{m}(\bm{x}_{1:n}) \\ m(\bm{x}_{*})
+            \end{bmatrix}
+            ,\ 
+            \begin{bmatrix}
+                \bm{K}(\bm{x}_{1:n}) & \bm{\kappa}(\bm{x}_{*},\ \bm{x}_{1:n}) \\
+                \bm{\kappa}(\bm{x}_{*},\ \bm{x}_{1:n})^\mathrm{T} & \kappa(\bm{x}_{*},\ \bm{x}_{*})
+            \end{bmatrix}
+            )
+\end{equation}
+と表せる。
+
+\begin{equation}
+    p(y_{*} | \bm{y}_{1:n})
+        = p\qty(f(\bm{x}_{*}) | \mathcal{D}_{1:n})
+        = \mathcal{N}\qty(f(\bm{x}_{*}) | \mu_n (\bm{x}_{*}), \sigma_n^2 (\bm{x}_{*}))
+\end{equation}
+とおき，
+\(\bm{y}_1\)を\(\bm{y}_{1:n}\)に，
+\(\bm{y}_2\)を\(y_{*}\)に置き換えて考える。
+すると，式(\ref{eq:y_split}) -- (\ref{eq:sigma_2_hat})より，
+次式が成立する。
+\begin{align}
+    & \mu_n (\bm{x}_{*}) = m(\bm{x}_{*}) + \bm{\kappa}(\bm{x}_{*},\ \bm{x}_{1:n})^\mathrm{T} \bm{K}(\bm{x}_{1:n})^{-1} \qty(\bm{y}_{1:n} - \bm{m}(\bm{x}_{1:n})) \\
+    & \sigma_n^2 (\bm{x}_{*}) = \kappa(\bm{x}_{*},\ \bm{x}_{*}) - \bm{\kappa}(\bm{x}_{*},\ \bm{x}_{1:n})^\mathrm{T} \bm{K}(\bm{x}_{1:n})^{-1} \bm{\kappa}(\bm{x}_{*},\ \bm{x}_{1:n})
+\end{align}
+
+
+
+\end{document}
